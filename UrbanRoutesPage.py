@@ -9,7 +9,8 @@ class UrbanRoutesPage:
 
     order_a_taxi_button = (By.CSS_SELECTOR, "button[type='button'].button.round")
     comfort_image = (By.CSS_SELECTOR, "img[alt='Comfort']")
-
+    tariff_section = (By.CSS_SELECTOR, "div.tariff-picker.shown")
+    order_requirements_section = (By.CSS_SELECTOR, "div.reqs.open")
 
     phone_number_section = (By.CSS_SELECTOR, "div.np-text")
     phone_number_field = (By.ID, 'phone')
@@ -24,14 +25,18 @@ class UrbanRoutesPage:
     code_field = (By.CSS_SELECTOR, '#code.card-input')
     link_button = (By.CSS_SELECTOR, "div.pp-buttons button[type='submit'].button.full")
     close_payment_window_button = (By.CSS_SELECTOR, "div.payment-picker button.close-button.section-close")
+    card_selected =  (By.CSS_SELECTOR, "div.pp-value")
 
     driver_comment_field = (By.ID, 'comment')
+    manta_and_scarves_check_box_field = (By.CSS_SELECTOR, "input[type='checkbox'].switch-input")
     manta_and_scarves_check_box = (By.CSS_SELECTOR, "div.reqs-body > div span.slider.round")
     ice_cream_section = (By.CSS_SELECTOR, "div.r-group-items > div:nth-child(1) div.counter-plus")
+    ice_cream_counter = (By.CSS_SELECTOR, "div.r-group-items > div:nth-child(1) div.counter-value")
     chocolate_section = (By.CSS_SELECTOR, "div.r-group-items > div:nth-child(2) div.counter-plus")
+    chocolate_counter = (By.CSS_SELECTOR, "div.r-group-items > div:nth-child(2) div.counter-value")
 
     ask_for_a_taxi_button = (By.CSS_SELECTOR, "button.smart-button")
-    set_order_body = (By.XPATH, "//div[@class='number']")
+    order_body = (By.XPATH, "//div[@class='number']")
     bender_image = (By.CSS_SELECTOR, "div.order-body img[alt='close']")
 
     def __init__(self, driver):
@@ -53,12 +58,8 @@ class UrbanRoutesPage:
         self.driver.find_element(*self.card_number_field).send_keys(card_number)
 
     def set_card_code(self, card_code):
-        print("cvv:",card_code)
         self.driver.find_element(*self.code_field).send_keys(card_code)
-        print("obteniendo cvv")
         self.driver.find_element(*self.code_field).send_keys(Keys.TAB)
-        print("sacando de foco")
-
 
     def set_message_for_driver(self, message_for_driver):
         self.driver.find_element(*self.driver_comment_field).send_keys(message_for_driver)
@@ -130,8 +131,7 @@ class UrbanRoutesPage:
         self.set_message_for_driver(driver_comment_field)
         self.manta_and_scarves_check_box_click()
         self.ice_cream_click()
-        self.chocolate_click()
-        self.chocolate_click()
+        self.ice_cream_click()
 
     def set_ask_for_a_taxi(self):
         self.ask_for_a_taxi_click()
@@ -157,3 +157,27 @@ class UrbanRoutesPage:
 
     def get_driver_comment_field(self) -> str:
         return self.driver.find_element(*self.driver_comment_field).get_property('value')
+
+    def get_chocolate_counter(self)  -> str:
+        return self.driver.find_element(*self.chocolate_counter).text
+
+    def get_ice_cream_counter(self)  -> str:
+        return self.driver.find_element(*self.ice_cream_counter).text
+
+    def is_visible_taxi_back_arrow(self):
+        return self.driver.find_element(*self.tariff_section).text!=''
+
+    def is_card_selected(self):
+        return self.driver.find_element(*self.card_selected).text=='Tarjeta'
+
+    def is_visible_order_requirements_section(self):
+        return self.driver.find_element(*self.order_requirements_section) is not None
+
+    def is_selected_manta_and_scarves_check_box_field(self):
+        return self.driver.find_element(*self.manta_and_scarves_check_box_field).is_selected()
+
+    def is_visible_modal_order_body(self):
+        return self.driver.find_element(*self.order_body) is not None
+
+    def is_visible_driver_information(self):
+        return self.driver.find_element(*self.bender_image) is not None

@@ -36,32 +36,41 @@ class TestUrbanRoutes:
         self.routes_page.order_a_taxi_click()
         (WebDriverWait(self.driver, 15).until(
             expected_conditions.visibility_of_element_located(self.routes_page.comfort_image)))
+        assert self.routes_page.is_visible_taxi_back_arrow()  #vaida que se haya seleccionado taxi
         self.routes_page.comfort_image_click()
+        assert self.routes_page.is_visible_order_requirements_section()  #valida que se haya seleccionado comfort
 
     def test_set_register_phone_number(self): #regista el numero de telefono
         phone_number = data.phone_number
         self.routes_page.set_register_phone_number(phone_number)
+        assert self.routes_page.get_phone_number_field()==data.phone_number  #valida que se haya capturado el teléfono
         code = retrieve_phone_code(self.driver)
+        assert code != ""   #valida que se haya generado el código que llega por SMS
         self.routes_page.set_register_sms_code(code)
 
     def test_set_way_to_pay(self):
         card_number = data.card_number
         card_code = data.card_code
         self.routes_page.set_way_to_pay(card_number, card_code)
+        assert self.routes_page.is_card_selected()  #valida que la tarjeta se agregó y se seleccionó
 
     def test_set_order_requiremets(self):
         self.routes_page.set_order_requirements(data.message_for_driver)
+        assert self.routes_page.get_driver_comment_field() == data.message_for_driver #valida el mensaje al conductor
+        assert self.routes_page.is_selected_manta_and_scarves_check_box_field() #valida selección de bufanda
+        assert self.routes_page.get_ice_cream_counter() == '2' #valida seleccionar 2 helados
 
     def test_ask_for_a_taxi(self):
         self.routes_page.ask_for_a_taxi_click()
         (WebDriverWait(self.driver, 50).until(
-            expected_conditions.visibility_of_element_located(self.routes_page.set_order_body)))
-
+            expected_conditions.visibility_of_element_located(self.routes_page.order_body)))
+        assert self.routes_page.is_visible_modal_order_body()  #se valida que aparezca la modal de buscar automóvil
         (WebDriverWait(self.driver, 50).until(
             expected_conditions.visibility_of_element_located(self.routes_page.bender_image)))
+        assert self.routes_page.is_visible_driver_information()  #se valida que aparece la información del conductor
 
 
     @classmethod
     def teardown_class(cls):
-        time.sleep(4)
+        time.sleep(8)
         cls.driver.quit()
