@@ -30,13 +30,15 @@ class TestUrbanRoutes:
         assert self.routes_page.get_to() == address_to
         time.sleep(5)
 
-    def test_set_taxi_options(self): # selecciona el metodo de taxi
+    def test_select_taxi_options(self): # selecciona el metodo de taxi
         (WebDriverWait(self.driver, 15).until(
             expected_conditions.visibility_of_element_located(self.routes_page.order_a_taxi_button)))
         self.routes_page.order_a_taxi_click()
         (WebDriverWait(self.driver, 15).until(
             expected_conditions.visibility_of_element_located(self.routes_page.comfort_image)))
         assert self.routes_page.is_visible_taxi_back_arrow()  #vaida que se haya seleccionado taxi
+
+    def test_select_comfort(self):  # selecciona el metodo de taxi
         self.routes_page.comfort_image_click()
         assert self.routes_page.is_visible_order_requirements_section()  #valida que se haya seleccionado comfort
 
@@ -44,6 +46,8 @@ class TestUrbanRoutes:
         phone_number = data.phone_number
         self.routes_page.set_register_phone_number(phone_number)
         assert self.routes_page.get_phone_number_field()==data.phone_number  #valida que se haya capturado el teléfono
+
+    def test_set_register_sms_code(self):  # regista el numero de telefono
         code = retrieve_phone_code(self.driver)
         assert code != ""   #valida que se haya generado el código que llega por SMS
         self.routes_page.set_register_sms_code(code)
@@ -54,10 +58,14 @@ class TestUrbanRoutes:
         self.routes_page.set_way_to_pay(card_number, card_code)
         assert self.routes_page.is_card_selected()  #valida que la tarjeta se agregó y se seleccionó
 
-    def test_set_order_requiremets(self):
+    def test_set_message_for_driver(self):
         self.routes_page.set_order_requirements(data.message_for_driver)
         assert self.routes_page.get_driver_comment_field() == data.message_for_driver #valida el mensaje al conductor
+
+    def test_select_manta_scarves(self):
         assert self.routes_page.is_selected_manta_and_scarves_check_box_field() #valida selección de bufanda
+
+    def test_select_two_ice_cream(self):
         assert self.routes_page.get_ice_cream_counter() == '2' #valida seleccionar 2 helados
 
     def test_ask_for_a_taxi(self):
@@ -65,6 +73,8 @@ class TestUrbanRoutes:
         (WebDriverWait(self.driver, 50).until(
             expected_conditions.visibility_of_element_located(self.routes_page.order_body)))
         assert self.routes_page.is_visible_modal_order_body()  #se valida que aparezca la modal de buscar automóvil
+
+    def test_view_driver_information(self):
         (WebDriverWait(self.driver, 50).until(
             expected_conditions.visibility_of_element_located(self.routes_page.bender_image)))
         assert self.routes_page.is_visible_driver_information()  #se valida que aparece la información del conductor
