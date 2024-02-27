@@ -82,5 +82,5 @@ class TestUrbanRoutes:
 
     @classmethod
     def teardown_class(cls):
-        time.sleep(8)
+        time.sleep(7)
         cls.driver.quit()
