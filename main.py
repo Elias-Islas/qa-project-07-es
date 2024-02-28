@@ -30,15 +30,13 @@ class TestUrbanRoutes:
         assert self.routes_page.get_to() == address_to
         time.sleep(5)
 
-    def test_select_taxi_options(self): # selecciona el metodo de taxi
+    def test_select_comfort(self): # selecciona comfort
         (WebDriverWait(self.driver, 15).until(
             expected_conditions.visibility_of_element_located(self.routes_page.order_a_taxi_button)))
         self.routes_page.order_a_taxi_click()
         (WebDriverWait(self.driver, 15).until(
             expected_conditions.visibility_of_element_located(self.routes_page.comfort_image)))
-        assert self.routes_page.is_visible_taxi_back_arrow()  #vaida que se haya seleccionado taxi
-
-    def test_select_comfort(self):  # selecciona el metodo de taxi
+        assert self.routes_page.is_visible_taxi_back_arrow()  #valida que se haya seleccionado taxi
         self.routes_page.comfort_image_click()
         assert self.routes_page.is_visible_order_requirements_section()  #valida que se haya seleccionado comfort
 
@@ -46,13 +44,11 @@ class TestUrbanRoutes:
         phone_number = data.phone_number
         self.routes_page.set_register_phone_number(phone_number)
         assert self.routes_page.get_phone_number_field()==data.phone_number  #valida que se haya capturado el teléfono
-
-    def test_set_register_sms_code(self):  # regista el numero de telefono
         code = retrieve_phone_code(self.driver)
         assert code != ""   #valida que se haya generado el código que llega por SMS
         self.routes_page.set_register_sms_code(code)
 
-    def test_set_way_to_pay(self):
+    def test_set_card_to_pay(self):
         card_number = data.card_number
         card_code = data.card_code
         self.routes_page.set_way_to_pay(card_number, card_code)
@@ -82,5 +78,5 @@ class TestUrbanRoutes:
 
     @classmethod
     def teardown_class(cls):
-        time.sleep(7)
+        time.sleep(8)
         cls.driver.quit()
